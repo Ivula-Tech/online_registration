@@ -45,7 +45,7 @@ const submitForm = () => {
               const imageLink = response.data;
 
               axios
-                .post("http://localhost:8000/auth_service", null, {
+                .post("http://https://iit-21-flower-delivery-app-mcshelton.onrender.com/auth_service", null, {
                   params: {
                     userName: userName,
                     password: Password,
@@ -58,7 +58,7 @@ const submitForm = () => {
                   if (res.token != "The email provided is already taken") {
                     axios
                       .post(
-                        "http://localhost:8000/front_end_service/addStation",
+                        "http://192.168.1.106:8000/front_end_service/addStation",
                         null,
                         {
                           headers: {

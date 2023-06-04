@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Staff Panel</title>
+
+
+    <script src="https://kit.fontawesome.com/3749f8064c.js" crossorigin="anonymous"></script>
+    <style>
+        #logbox {
+            position: fixed;
+            margin-top: 200px;
+            background: white;
+            padding: 10px;
+            box-shadow: 5px 5px 10px 5px;
+            border: 2px solid red;
+            display: none;
+            z-index: 10;
+        }
+
+        #logbox p {
+
+            font-weight: 700;
+        }
+
+        select {
+            height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+            background: transparent;
+        }
+
+        #logbox button {
+            margin-left: 5%;
+        }
+
+        #fas_close {
+            float: right;
+        }
+
+        #changeBox {
+            position: fixed;
+            display: none;
+            padding-top: 30%;
+            border: 1px solid grey;
+            height: 100%;
+            width: 100%;
+            background-color: white;
+            top: 0px;
+            left: 0px;
+
+        }
+
+        input {
+            margin: 5px
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+
+    <div id="main" align='center'>
+        <form action="submitForm()" method="POST" enctype='multipart/form-data'>
+
+            <h2>Eltus Online</h2>
+            <h3>Supplier Details</h3>
+
+
+            <input type="text" name="Name" id="Name" placeholder="Full Name">
+            <input type="email" name="Email" id="Email" placeholder="Email">
+            <input type="number" name="number" id="Number" placeholder="Phone Number">
+            <input type="password" name="Password" id="Password" placeholder="Password">
+            <input type="password" name="ConfirmPass" id="ConfirmPass" placeholder="Confirm Password">
+
+            <h3>Station Details</h3>
+
+            <input type='text' name='StationName' id="StationName" placeholder="Station Name">
+            <input type='text' name='town' id='town' placeholder='your location' onkeyup="notPast()" required>
+            <script>
+                    let tracker;
+                const notPast=()=>{
+                    var townDOM = document.getElementById('town')
+                    var town = townDOM.value
+                    let listCat = document.getElementById('listCat')
+                    let townList = town.trim().split(' ')
+
+                    townList.length < 3 ? 
+                        (()=>{
+                            tracker = town
+                            console.log('asdf')
+                        })()
+                    : 
+                    (()=>{
+                        townDOM.value = tracker
+                        alert('location name too long, can only allow 2 words, i.e, ongata rongai')
+                    })()
+
+                    console.log(town)
+
+
+                }
+            </script>
+            <input type='password' id='connewpass' placeholder='Confirm new Admin Code' required>
+            <br>
+            <select name='estDel' id='estDel' style="margin-top:20px">
+                <option value='null'>~ select delivery time ~</option>
+                <option value='10-20 min'>10-20 min</option>
+                <option value='20-40 min'>20-40 min</option>
+                <option value='40-60 min'>40-60 min</option>
+                <option value='1-3 hrs'>1-3 hrs</option>
+                <option value='3-5 hrs'>3-5 hrs</option>
+            </select>
+
+            <div>
+                <p id="listDis" style="
+                    margin: 0;
+                    margin-top: 10px;">
+                    </p>
+            <select style="
+            display: block;
+            " name='categ' id='categ' style="margin-top:20px" onchange="getlist()">
+                <option value='null'>~ select gas types ~</option>
+                <option value='total'>Total</option>
+                <option value='afri-gas'>Afri-Gas</option>
+                <option value='k-gas'>K-Gas</option>
+            </select>
+        </div>
+            <input type='text' name='listCat' id="listCat" style="display: none;">
+            <script>
+                var categList = []
+                const getlist = () => {
+                    let categ = document.getElementById('categ')
+                    let listDis = document.getElementById('listDis')
+                    categ = categ.value
+                    categList.indexOf(categ) < 0 && categList.push(categ)
+
+                    listDis.innerHTML = categList
+                    console.log(categList)
+                }
+            </script>
+
+            <script>
+                var changeBox = document.getElementById('changeBox');
+                var newpass = document.getElementById('newpass');
+                var oldpass = document.getElementById('oldpass');
+                var connewpass = document.getElementById('connewpass');
+
+                function openConfirm() {
+                    if (newpass.value != '' && oldpass.value != '') {
+                        if (newpass.value == connewpass.value) {
+                            changeBox.style.display = 'block';
+                        } else {
+                            alert('Your passwords did not match')
+                        }
+                    } else {
+                        alert('You left a field empty')
+                    }
+                }
+
+                function cancel() {
+                    changeBox.style.display = 'none';
+                }
+            </script>
+
+            <label for="File" style="margin-top: -20px;">
+                <p>Station Image</p>
+            </label>
+
+
+            <div style="
+border: 2px solid grey;
+height: 250px;
+width: 250px;
+max-height: 250px;
+max-width: 250px;
+overflow: hidden;
+">
+
+                <label for="File" id="file_input" style="
+/* border: 6px solid grey; */
+">
+                    <!-- <img src='#' id="disp_image" style="
+    height: 100%;
+    width: 100%;
+    "/> -->
+                    <div id="disp_image" style="
+    height: 100%;
+    width: 100%;
+    /* background: url('ewer') cover; */
+    "></div>
+                </label>
+
+            </div>
+            <p id="disp_name">nothign yet</p>
+            <input type="file" name="in_file" id="File" onchange="getImageData()">
+
+        </form>
+    <button onclick="submitForm()" style="display: block;margin-top: 10px;">Submit</button>
+
+    <script>
+        var navbut = document.getElementById('fas');
+        var navcont = document.getElementById('nav_cont');
+        var chooseFile = document.getElementById('File');
+        var txt = document.getElementById('file_input');
+        var filedir = document.getElementById('disp_name');
+        var imgPreview = document.getElementById('disp_image');
+        var filext = ["vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx"];
+
+        
+        function fas_bar() {
+            navbut.style.display = 'none';
+            navcont.style.display = 'block';
+        }
+
+        function fas_bar_nav() {
+            navbut.style.display = 'block';
+            navcont.style.display = 'none';
+        }
+
+        chooseFile.onchange = evt => {
+            const [file] = chooseFile.files
+            var files_ = chooseFile.files[0];
+
+            var fileFullName = files_.name;
+
+            if (file) {
+                imgPreview.style.background = `url(${URL.createObjectURL(file)})`
+                imgPreview.style.backgroundSize = 'cover',
+                    imgPreview.style.backgroundPosition = 'center center',
+                    filedir.innerHTML = fileFullName;
+                imgPreview.style.marginTop = '5%';
+
+            }
+        }
+
+        var hotelName = '';
+        console.log(hotelName);
+
+    </script>
+    <script>
+        const submitForm = () => {
+  const userName = document.getElementById("Name").value;
+  const userEmail = document.getElementById("Email").value;
+  const Password = document.getElementById("Password").value;
+  const confPass = document.getElementById("ConfirmPass").value;
+  const phone = document.getElementById("Number").value;
+  
+  
+  let lat ;
+  const here = 'here'
+  let long;
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+            console.log('log here ', lat, long)
+          } else {
+            alert("Geolocation is not supported by this browser, we cant sign you in.");
+          }
+        
+    
+        function showPosition(position) {
+          lat = position.coords.latitude;
+          long = position.coords.longitude;
+          
+          console.log("Latitude: " + lat);
+          console.log("Longitude: " + long);
+
+
+  const fileInput = document.getElementById("File");
+  var file = fileInput.files[0];
+
+  var formData = new FormData();
+  formData.append("in_file", file);
+
+  //   const image = document.getElementById("File").value;
+  const stationName = document.getElementById("StationName").value;
+  const estDel = document.getElementById("estDel").value;
+  const town = document.getElementById("town").value;
+
+  const tier = "contractor";
+  const stationLocation = {
+    lat: lat,
+    long: long,
+  };
+  console.log(lat,long)
+  const rating = "";
+
+  console.log("username", categList, userName);
+  
+
+  categList != "" &&
+  categList != " " &&
+  estDel != "" &&
+  estDel != " " &&
+  userName != "" &&
+  userName != " " &&
+  userEmail != "" &&
+  userEmail != " " &&
+  stationName != "" &&
+  stationName != " " &&
+  Password != "" &&
+  Password != " "
+    ? (() => {
+        if (Password == confPass) {
+          axios
+            .post("http://eltus.ivula.co.ke/filing.php", formData)
+            .then(function (response) {
+              const imageLink = response.data;
+
+              axios
+                .post("http://192.168.1.106:8000/auth_service", null, {
+                  params: {
+                    userName: userName,
+                    password: Password,
+                    userEmail: userEmail,
+                    phoneNumber: phone,
+                    type: "contractor",
+                  },
+                })
+                .then((res) => {
+                  if (res.token != "The email provided is already taken") {
+                    axios
+                      .post(
+                        "http://192.168.1.106:8000/front_end_service/addStation",
+                        null,
+                        {
+                          headers: {
+                            authorization: res.data.token,
+                          },
+                          params: {
+                            stationOwner: "6426d0422f9bb5ea523ab77c",
+                            stationName: stationName,
+                            stationLocation: stationLocation,
+                            gasCategories: categList,
+                            stationImage: imageLink,
+                            town: town,
+                            estDel: estDel,
+                            phoneNumber:phone
+                          },
+                        }
+                      )
+                      .then((res) => {
+                        if (
+                          res.data.data !=
+                          "An error occured, Kindly try again later"
+                        ) {
+                          console.log(res.data.token);
+                          alert('Sign in was succeful, redirect to the app')
+                        } else {
+                          alert("Sign ina la full");
+                        }
+                      })
+                      .catch((err) => {
+                        alert('the email provided is taken');
+                      });
+                  } else {
+                    alert("Sign In success full");
+                  }
+                })
+                .catch((err) => {
+                    alert('Sign in was unsuccesful, an error occured')
+                });
+            })
+            .catch(function (error) {
+              alert("upload was unsuccefull kindly try again");
+            });
+        } else {
+          alert("The passwords did not match");
+        }
+      })()
+    : (() => {
+        alert("Could not submit form, you must have left some fields empty");
+      })();
+        }
+        
+};
+
+    </script>
+</body>
+
+</html>
