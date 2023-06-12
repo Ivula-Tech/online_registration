@@ -60,6 +60,8 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
 
 </head>
 
@@ -106,7 +108,7 @@
 
                 }
             </script>
-            <input type='password' id='connewpass' placeholder='Confirm new Admin Code' required>
+            <!-- <input type='password' id='connewpass' placeholder='Confirm new Admin Code' required> -->
             <br>
             <select name='estDel' id='estDel' style="margin-top:20px">
                 <option value='null'>~ select delivery time ~</option>
@@ -182,15 +184,9 @@ max-width: 250px;
 overflow: hidden;
 ">
 
-                <label for="File" id="file_input" style="
-/* border: 6px solid grey; */
-">
-                    <!-- <img src='#' id="disp_image" style="
-    height: 100%;
-    width: 100%;
-    "/> -->
-                    <div id="disp_image" style="
-    height: 100%;
+                <label for="File" id="file_input">
+                    
+                    <div id="disp_image" style=" height: 100%;
     width: 100%;
     /* background: url('ewer') cover; */
     "></div>
@@ -243,7 +239,9 @@ overflow: hidden;
         console.log(hotelName);
 
     </script>
-    <script src="/submit.js"></script>
+    <script src="/submit.js"></script>  
+    <script>
+    </script>
 </body>
 
 </html>
